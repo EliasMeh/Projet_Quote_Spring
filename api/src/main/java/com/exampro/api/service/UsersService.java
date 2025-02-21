@@ -19,6 +19,9 @@ public class UsersService {
     }
 
     public Users createUser(Users user) {
+        if (usersRepository.findByUsername(user.getUsername()).isPresent()) {
+            return null;
+        }
         return usersRepository.save(user);
     }
 
@@ -28,6 +31,9 @@ public class UsersService {
 
     public Users getUserById(Long id) {
         return usersRepository.findById(id).orElse(null);
+    }
+    public Users getUserByName(String username) {
+        return usersRepository.findByUsername(username).orElse(null);
     }
 
     public void deleteUser(Long id) {

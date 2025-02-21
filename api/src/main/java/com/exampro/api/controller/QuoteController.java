@@ -38,4 +38,9 @@ public class QuoteController {
     public void deleteQuote(@PathVariable Long id) {
         quoteService.deleteQuote(id);
     }
+    
+    @GetMapping("/random")
+    public Quote getRandomQuote() {
+    	return quoteService.getRandomQuote();
+    }
 }

@@ -7,6 +7,7 @@ import com.exampro.api.entity.Quote;
 import com.exampro.api.repository.QuoteRepository;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class QuoteService {
@@ -32,5 +33,15 @@ public class QuoteService {
 
     public void deleteQuote(Long id) {
         quoteRepository.deleteById(id);
+    }
+    
+    public Quote getRandomQuote() {
+        List<Quote> quotes = quoteRepository.findAll();
+        if (!quotes.isEmpty()) {
+            Random random = new Random();
+            int randomIndex = random.nextInt(quotes.size());
+            return quotes.get(randomIndex); 
+        }
+        return null; 
     }
 }

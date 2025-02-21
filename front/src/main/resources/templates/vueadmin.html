@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+</head>
+<body>
+    <h1>Liste des conversations</h1>
+    <table>
+		<tr>
+			<th>Demande</th>
+			<th>Nom user</th>
+			<th>Quote donnée</th>
+		</tr>
+		<tr th:each="conversation : ${conversations}">
+		    <td><span th:text="${conversation.demande}">Texte de la demande</span></th>
+		    <td><span th:text="${conversation.user.username}">Utilisateur</span></th>
+		    <td><span th:text="${conversation.quote.quote}">Réponse Quote</span></th>
+			<td><span th:text="${conversation.date}">Date de la demande</span></th>
+		</tr>
+
+    </table>
+    <a href="/">Back to Home</a>
+</body>
+</html>

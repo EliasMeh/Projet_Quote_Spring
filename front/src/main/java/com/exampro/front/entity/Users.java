@@ -1,9 +1,8 @@
-package com.exampro.api.entity;
+package com.exampro.front.entity;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

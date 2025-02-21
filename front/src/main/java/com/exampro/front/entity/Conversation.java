@@ -1,4 +1,4 @@
-package com.exampro.api.entity;
+package com.exampro.front.entity;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
@@ -24,11 +24,6 @@ public class Conversation {
     
     private LocalDateTime date;
     
-    @PrePersist
-    protected void onCreate() {
-        this.date = LocalDateTime.now();
-    }
-
     public Conversation() {}
 
 	public Conversation(Long id, String demande, Users user, Quote quote) {
