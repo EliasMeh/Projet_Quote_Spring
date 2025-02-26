@@ -28,3 +28,6 @@ API endpoints:
 /api/getQuote : Retourne une quote aléatoire de la base de donnée
 
 Pour permettre une meilleure logique l'api possède certe qu'un seul modèle mais partage la même base de donnée avec le front pour la sauvegarde des conversations.
+
+Manque:
+Test unitaires
