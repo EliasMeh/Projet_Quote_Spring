@@ -2,146 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Spring Boot Web App</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const submitButton = document.getElementById('submit');
-            const demandeInput = document.getElementById('demande');
-            const userInput = document.getElementById('user');
-            const randomQuoteElement = document.getElementById('random-quote');
-            const errorMessageElement = document.getElementById('error-message');
-
-            let currentQuoteId = null;
-
-            async function fetchRandomQuote() {
-                try {
-                    const response = await fetch('http://localhost:8080/api/quotes/random');
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    randomQuoteElement.innerText = `"${data.quote}"`;
-                    currentQuoteId = data.id;
-                } catch (error) {
-                    console.error('Error fetching random quote:', error);
-                    errorMessageElement.innerText = 'Failed to fetch random quote. Please try again later.';
-                } finally {
-                    randomQuoteElement.disabled = true; // Enable the quote after fetching or error
-                }
-            }
-
-            // fetchRandomQuote(); // Call on page load. REMOVE THIS LINE
-
-            submitButton.addEventListener('click', async function () {
-				randomQuoteElement.disabled = false; // Enable the quote
-
-                const demande = demandeInput.value;
-                const username = userInput.value;
-
-                errorMessageElement.innerText = '';
-
-                if (!demande || !username) {
-                    errorMessageElement.innerText = 'Please fill in both the demand and username fields.';
-                    return;
-                }
-
-                try {
-                    let userId = await getUserIdByUsername(username);
-                    if (!userId) {
-                        userId = await createUser(username);
-                    }
-
-                    if (userId) {
-                        await fetchRandomQuote()
-						await createConversation(demande, userId);
-
-
-                    } else {
-                        throw new Error('Failed to get or create user');
-                    }
-
-                } catch (error) {
-                    console.error('Error processing request:', error);
-                    errorMessageElement.innerText = 'An unexpected error occurred. Please try again.';
-                }
-            });
-
-            async function getUserIdByUsername(username) {
-                try {
-                    const response = await fetch(`http://localhost:8080/api/users/by-name/${username}`);
-                    if (response.ok) {
-                        const user = await response.json();
-                        return user.id;
-                    } else if (response.status === 404) {
-                        return null;
-                    } else {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                } catch (error) {
-                    console.error('Error checking user:', error);
-                    return null;
-                }
-            }
-
-            async function createUser(username) {
-                try {
-                    const response = await fetch('http://localhost:8080/api/users', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ username: username })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    return data.id;
-                } catch (error) {
-                    console.error('Error creating user:', error);
-                    errorMessageElement.innerText = 'Error creating user. Please try again.';
-                    return null;
-                }
-            }
-
-            async function createConversation(demande, userId) {
-                try {
-                    if (!currentQuoteId) {
-                        throw new Error('No quote available');
-                    }
-
-                    const response = await fetch('http://localhost:8080/api/conversations', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            demande: demande,
-                            user: { id: userId },
-                            quote: { id: currentQuoteId }
-
-                        })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    alert('Conversation postée!');
-                    demandeInput.value = '';
-                    userInput.value = '';
-
-                } catch (error) {
-                    console.error('Error creating conversation:', error);
-                    errorMessageElement.innerText = 'Error creating conversation. Please try again.';
-                }
-            }
-
-        });
-
-    </script>
 </head>
 <body>
     <h1>Bienvenue dans la page de l'application Front du Projet</h1>
@@ -149,20 +9,22 @@
     <p>Plaignez-vous dans le champ ci-dessous</p>
     <p>Et au lieu d'améliorer vos conditions de travail voici des citations &#128526;</p>
 
-    <p id="random-quote" disabled="true" data-quote-id=""></p>
+    <p th:text="${quote}" data-quote-id=""></p>
 
-    <label>Demande
-        <input id="demande">
-    </label>
-    <br/>
-    <label>User
-        <input id="user">
-    </label>
-    <br/>
-    <button id="submit">Submit</button>
+    <form action="#" th:action="@{/conversation}" th:method="post">
+        <label>Demande:
+            <input type="text" name="demande">
+        </label>
+        <br/>
+        <label>User:
+            <input type="text" name="username">
+        </label>
+        <br/>
+        <button type="submit">Submit</button>
+    </form>
 
     <br/>
-    <a href="/conversations">Go to admin page</a>
+    <a href="/conversations">Page de liste des conversations</a>
 
     <div id="error-message" style="color: red;"></div>
 </body>

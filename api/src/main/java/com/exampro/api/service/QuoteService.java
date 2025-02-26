@@ -22,18 +22,6 @@ public class QuoteService {
     public Quote createQuote(Quote quote) {
         return quoteRepository.save(quote);
     }
-
-    public List<Quote> getAllQuotes() {
-        return quoteRepository.findAll();
-    }
-
-    public Quote getQuoteById(Long id) {
-        return quoteRepository.findById(id).orElse(null);
-    }
-
-    public void deleteQuote(Long id) {
-        quoteRepository.deleteById(id);
-    }
     
     public Quote getRandomQuote() {
         List<Quote> quotes = quoteRepository.findAll();

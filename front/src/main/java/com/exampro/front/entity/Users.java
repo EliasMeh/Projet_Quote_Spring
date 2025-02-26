@@ -1,6 +1,7 @@
 package com.exampro.front.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 public class Users {
@@ -10,16 +11,19 @@ public class Users {
 
     private String username;
 
-    Users(){}
-    
-    
-	public Users(Long id, String username) {
-		super();
-		this.id = id;
-		this.username = username;
-	}
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Conversation> conversations;
 
-	public Long getId() {
+    public Users(){}
+    
+    public Users(Long id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
+    
+    
+    public Long getId() {
 		return id;
 	}
 
@@ -34,5 +38,12 @@ public class Users {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-    
+
+	public List<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(List<Conversation> conversations) {
+        this.conversations = conversations;
+    }
 }

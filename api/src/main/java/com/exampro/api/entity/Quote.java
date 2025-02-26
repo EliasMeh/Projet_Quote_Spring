@@ -13,9 +13,8 @@ public class Quote {
 
     public Quote() {}
     
-	public Quote(Long id, String quote) {
+	public Quote(String quote) {
 		super();
-		this.id = id;
 		this.quote = quote;
 	}
 

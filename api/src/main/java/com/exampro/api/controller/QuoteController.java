@@ -9,7 +9,7 @@ import com.exampro.api.service.QuoteService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/quotes")
+@RequestMapping("/api")
 public class QuoteController {
 
     private final QuoteService quoteService;
@@ -18,28 +18,8 @@ public class QuoteController {
     public QuoteController(QuoteService quoteService) {
         this.quoteService = quoteService;
     }
-
-    @GetMapping
-    public List<Quote> getAllQuotes() {
-        return quoteService.getAllQuotes();
-    }
-
-    @GetMapping("/{id}")
-    public Quote getQuoteById(@PathVariable Long id) {
-        return quoteService.getQuoteById(id);
-    }
-
-    @PostMapping
-    public Quote createQuote(@RequestBody Quote quote) {
-        return quoteService.createQuote(quote);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteQuote(@PathVariable Long id) {
-        quoteService.deleteQuote(id);
-    }
     
-    @GetMapping("/random")
+    @GetMapping("/getQuote")
     public Quote getRandomQuote() {
     	return quoteService.getRandomQuote();
     }
