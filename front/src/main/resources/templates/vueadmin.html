@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var usernames = [];
+            $('tbody tr').each(function() {
+                var username = $(this).find('td:nth-child(2) span').text();
+                if (!usernames.includes(username)) {
+                    usernames.push(username);
+                }
+            });
+
+            var userList = `
+                <div class="user-list-container">
+                    <h2>User Conversations</h2>
+                    <button class="user-link" data-username="all">Show All</button>
+                    <ul class="user-list">
+            `;
+            usernames.forEach(function(username) {
+                userList += `<li><button class="user-link" data-username="${username}">${username}</button></li>`;
+            });
+            userList += `
+                    </ul>
+                </div>
+            `;
+            $('body').prepend(userList);
+
+            $('tbody tr').hide();
+
+            $('.user-link').click(function(e) {
+                e.preventDefault();
+                const selectedUsername = $(this).data('username');
+                
+                $('tbody tr').hide();
+                
+                if (selectedUsername === 'all') {
+                    $('tbody tr').show();
+                } else {
+                    $('tbody tr').filter(function() {
+                        return $(this).find('td:nth-child(2) span').text() === selectedUsername;
+                    }).show();
+                }
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        
+        .user-list-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .user-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .user-list li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        .user-link {
+            cursor: pointer;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        
+        .user-link:hover {
+            background-color: #0056b3;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f0f0f0;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; margin-top: 20px;">Liste des conversations</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Demande</th>
+                <th>Nom user</th>
+                <th>Quote donnée</th>
+                <th>Date de la demande</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="conversation : ${conversations}">
+                <td><span th:text="${conversation.demande}">Texte de la demande</span></td>
+                <td><span th:text="${conversation.user.username}">Utilisateur</span></td>
+                <td><span th:text="${conversation.quote.quote}">Réponse Quote</span></td>
+                <td><span th:text="${conversation.date}">Date de la demande</span></td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/">Back to Home</a>
+    </div>
+</body>
+</html>
