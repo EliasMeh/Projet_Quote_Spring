@@ -39,10 +39,8 @@ public class ConversationController {
     public String postConversation(@RequestParam String username, @RequestParam String demande, Model model) {
         conversationService.saveConversation(username, demande);
 
-        // Fetch new quote
         Quote quote = restTemplate.getForObject("http://localhost:8080/api/getQuote", Quote.class);
 
-        // Add the quote to the model
         model.addAttribute("quote", quote.getQuote());
 
         return "index";

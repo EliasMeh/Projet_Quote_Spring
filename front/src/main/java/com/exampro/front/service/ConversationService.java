@@ -43,7 +43,6 @@ public class ConversationService {
         conversation.setDemande(demande);
         conversation.setDate(LocalDateTime.now());
         
-        // Récupérer une citation depuis l'API
         Quote quote = restTemplate.getForObject("http://localhost:8080/api/getQuote", Quote.class);
         conversation.setQuote(quote);
         

@@ -9,6 +9,5 @@ import com.exampro.front.entity.Users;
 
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
-    // You can add custom query methods here if needed
     List<Conversation> findByUserOrderByDateDesc(Users user);
 }
